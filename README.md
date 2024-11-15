@@ -453,3 +453,20 @@ This project is released under the [Apache 2.0 license](LICENSE).
 - [MIM](https://github.com/open-mmlab/mim): MIM installs OpenMMLab packages.
 - [MMEval](https://github.com/open-mmlab/mmeval): A unified evaluation library for multiple machine learning libraries.
 - [Playground](https://github.com/open-mmlab/playground): A central hub for gathering and showcasing amazing projects built upon OpenMMLab.
+
+
+
+## CUSTOM Configuration
+
+### Train
+```
+python tools/train.py configs/arti/mask2former_swin-t-p4-w7-224_2xb8-lsj-100e_arti_box.py
+```
+- multiple gpus
+
+```
+CUDA_VISIBLE_DEVICES=4 PORT=29500 ./tools/dist_train.sh configs/arti/mask2former_swin-t-p4-w7-224_2xb8-lsj-100e_arti_box.py 1
+```
+
+
+### Inference

@@ -6,6 +6,12 @@
 # The new config inherits a base config to highlight the necessary modification
 _base_ = ['../mask2former/mask2former_swin-t-p4-w7-224_8xb2-lsj-50e_coco.py']
 
+log_config = dict(
+    interval=50,  # 로그를 출력할 간격
+    hooks=[
+        dict(type='TextLoggerHook'),
+         ])
+
 # Set for class-agnostic instance segmentation
 num_things_classes = 1  # Only one class (object) for all instances
 num_stuff_classes = 0   # No stuff classes
@@ -22,7 +28,7 @@ model = dict(
         num_stuff_classes=num_stuff_classes),
     test_cfg=dict(panoptic_on=False))
 # Modify dataset related settings
-data_root = '/data/ksshin/pose_data_mmdet_box/'
+data_root = 'data/pose_data_mmdet/'
 metainfo = {
     'classes': ('object', ), #class-agnostic
     'palette': [
@@ -34,24 +40,24 @@ train_dataloader = dict(
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='train/annotation_coco.json',
+        ann_file='train/annotation_coco_valtest_reduce.json',
         data_prefix=dict(img='train/')))
 val_dataloader = dict(
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='val/annotation_coco.json',
+        ann_file='val/annotation_coco_valtest_reduce.json',
         data_prefix=dict(img='val/')))
 test_dataloader = dict(
     dataset=dict(
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='test/annotation_coco.json',
+        ann_file='test/annotation_coco_valtest_reduce.json',
         data_prefix=dict(img='test/')))
 
 # Modify metric related settings
-val_evaluator = dict(_delete_=True, type='CocoMetric',  metric=['bbox', 'segm'], ann_file=data_root + 'val/annotation_coco.json')
-test_evaluator = dict(_delete_=True, type='CocoMetric',  metric=['bbox', 'segm'], ann_file=data_root + 'test/annotation_coco.json')
+val_evaluator = dict(_delete_=True, type='CocoMetric',  metric=['bbox', 'segm'], ann_file=data_root + 'val/annotation_coco_valtest_reduce.json')
+test_evaluator = dict(_delete_=True, type='CocoMetric',  metric=['bbox', 'segm'], ann_file=data_root + 'test/annotation_coco_valtest_reduce.json')
 
 # We can use the pre-trained Mask RCNN model to obtain higher performance
 load_from = 'https://download.openmmlab.com/mmdetection/v3.0/mask2former/mask2former_swin-l-p4-w12-384-in21k_16xb1-lsj-100e_coco-panoptic/mask2former_swin-l-p4-w12-384-in21k_16xb1-lsj-100e_coco-panoptic_20220407_104949-82f8d28d.pth'
